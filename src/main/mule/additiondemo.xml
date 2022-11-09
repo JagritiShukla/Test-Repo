@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="cfe5a802-ecb6-4930-9024-5429c607ce7d" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<flow name="navneetFlow" doc:id="6dcc2f06-f902-4ce1-998f-e98c48e2180c" >
+		<http:listener doc:name="http listner" doc:id="267d2c5a-31df-4079-8744-7c6e0c53eb00" config-ref="HTTP_Listener_config" path="/add"/>
+		<logger level="INFO" doc:name="Logger" doc:id="c21ce7d6-0e0a-462b-b432-2194a46e7658" message="'payload'"/>
+		<set-variable value='#[10]' doc:name="Set Variable" doc:id="e3a8c034-e417-42bd-98f5-83f0777b386c" variableName="a"/>
+		<set-variable value='20' doc:name="Set Variable" doc:id="73ff9429-36f9-4386-a3db-eb6b7eeca15a" variableName="b"/>
+		<ee:transform doc:name="Transform Message" doc:id="38371247-a861-40b4-85e1-aff6a1493def" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::util::Math
+output application/json
+
+---
+{
+	"Result": vars.a + vars.b
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
